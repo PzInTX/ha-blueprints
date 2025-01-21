@@ -1,0 +1,91 @@
+blueprint:
+  name: SwitchBot Universal Remote Button Handler
+  description: This blueprint handles button presses from the SwitchBot Universal Remote, via. Matter, with customizable actions.
+  domain: automation
+  input:
+    button_1:
+      name: Button 1
+      description: Entity ID for Button 1
+      selector:
+        entity:
+          domain: sensor
+    button_2:
+      name: Button 2
+      description: Entity ID for Button 2
+      selector:
+        entity:
+          domain: sensor
+    button_3:
+      name: Button 3
+      description: Entity ID for Button 3
+      selector:
+        entity:
+          domain: sensor
+    button_4:
+      name: Button 4
+      description: Entity ID for Button 4
+      selector:
+        entity:
+          domain: sensor
+    button_1_action:
+      name: Button 1 Action
+      description: Action for Button 1 press
+      default: []
+      selector:
+        action: {}
+    button_2_action:
+      name: Button 2 Action
+      description: Action for Button 2 press
+      default: []
+      selector:
+        action: {}
+    button_3_action:
+      name: Button 3 Action
+      description: Action for Button 3 press
+      default: []
+      selector:
+        action: {}
+    button_4_action:
+      name: Button 4 Action
+      description: Action for Button 4 press
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: state
+    entity_id: !input button_1
+    id: button_1
+  - platform: state
+    entity_id: !input button_2
+    id: button_2
+  - platform: state
+    entity_id: !input button_3
+    id: button_3
+  - platform: state
+    entity_id: !input button_4
+    id: button_4
+
+condition:
+  - condition: template
+    value_template: "{{ trigger.to_state.attributes.event_type == 'initial_press' }}"
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: button_1
+        sequence: !input button_1_action
+      - conditions:
+          - condition: trigger
+            id: button_2
+        sequence: !input button_2_action
+      - conditions:
+          - condition: trigger
+            id: button_3
+        sequence: !input button_3_action
+      - conditions:
+          - condition: trigger
+            id: button_4
+        sequence: !input button_4_action
+mode: single
